@@ -1,0 +1,20 @@
+﻿Requirements:
+Digital Mars D2 Compiler
+D Forms Library tool (dfl.exe)
+UPX
+rcc (from Digital Mars)
+
+For debug build:
+run build.bat
+tspion.exe and hook.dll will appear in the current directory
+
+For release build:
+run build_release.bat
+tspion.exe and hook.dll
+tspion.exe and hook.dll will appear in the build directory
+
+For creating a packed launcher:
+first make sure you have done a release build
+change directory to build
+run pack.bat
+launch.exe will appear in the build\packed directory
