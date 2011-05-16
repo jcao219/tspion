@@ -1,3 +1,5 @@
+@echo off
+
    REM Copyright 2010 Jimmy Cao
 
    REM Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,9 +14,9 @@
    REM See the License for the specific language governing permissions and
    REM limitations under the License.
 
-@echo off
+
 cd packed
-dfl -J. -release ..\launch.d ..\tspion.res
+dmd -J.. -release -O -inline ..\launch.d
 del *.obj *.map
 upx launch.exe
 cd ..

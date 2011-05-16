@@ -12,7 +12,7 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-import dfl.internal.winapi;
+import std.c.windows.windows;
 import std.stdio;
 import std.string;
 
@@ -40,14 +40,14 @@ void main() {
 }
 
 void unpack() {
-	immutable char[] exedata = import("tspion.exe");
-	immutable char[] dlldata = import("hook.dll");
+	immutable(char[]) exedata = import("tspion.exe");
+	immutable(char[]) dlldata = import("hook.dll");
 	
 	write_wp(exedata, "tspion.exe");
 	write_wp(dlldata, "hook.dll");
 }
 
-void write_wp(char[] data, string fname) {
+void write_wp(immutable(char[]) data, string fname) {
 	uint lendata = data.length;
 	int progress;
 	write("["~" ".repeat(50)~"]"~"   0.00%");

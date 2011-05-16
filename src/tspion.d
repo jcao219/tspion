@@ -52,7 +52,7 @@ int main(string[] args) {
 			Sleep(50);
 			if(GetAsyncKeyState(VK_MENU) < 0 && GetAsyncKeyState(VK_CONTROL) < 0 &&
 			GetAsyncKeyState(VK_SHIFT) < 0 && GetAsyncKeyState(0x53) < 0) {
-				bool exitcode = UnhookWindowsHookEx(hHook);
+				bool exitcode = cast(bool)UnhookWindowsHookEx(hHook);
 				Runtime.unloadLibrary(cast(HMODULE)h_inst_dll);
 				ExitProcess(exitcode);
 				break;

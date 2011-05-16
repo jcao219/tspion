@@ -1,3 +1,5 @@
+@echo off
+
    REM Copyright 2010 Jimmy Cao
 
    REM Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +14,9 @@
    REM See the License for the specific language governing permissions and
    REM limitations under the License.
 
-@echo off
 cd build
-dmd -ofhook.dll ..\hook.d ..\hook.def ..\dll.d
-dfl -gui -release ..\tspion.d
+dmd -release -O -inline -ofhook.dll ..\hook.d ..\hook.def ..\dll.d
+dmd -L/exet:nt/su:windows:4.0 -release -O -inline ..\tspion.d
 del hook.map
 del hook.obj
 del tspion.map
