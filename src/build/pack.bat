@@ -13,9 +13,8 @@
    REM limitations under the License.
 
 @echo off
-rcc tspion.rc
 cd packed
-dfl -release ..\launch.d ..\tspion.res
+dfl -J. -release ..\launch.d ..\tspion.res
 del *.obj *.map
 upx launch.exe
 cd ..
