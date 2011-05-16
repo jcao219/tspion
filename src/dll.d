@@ -1,7 +1,7 @@
 //Public domain
 
 import std.c.windows.windows;
-import core.dll_helper;
+import core.sys.windows.dll;
 
 __gshared HINSTANCE g_hInst;
 
@@ -12,19 +12,19 @@ BOOL DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReserved)
     {
 	case DLL_PROCESS_ATTACH:
 	    g_hInst = hInstance;
-	    dll_process_attach( hInstance, true );
+	    dll_process_attach(hInstance);
 	    break;
 
 	case DLL_PROCESS_DETACH:
-	    dll_process_detach( hInstance, true );
+	    dll_process_detach(hInstance);
 	    break;
 
 	case DLL_THREAD_ATTACH:
-	    dll_thread_attach( true, true );
+	    dll_thread_attach();
 	    break;
 
 	case DLL_THREAD_DETACH:
-	    dll_thread_detach( true, true );
+	    dll_thread_detach();
 	    break;
     }
     return true;

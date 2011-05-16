@@ -22,6 +22,5 @@ del hook.obj
 del tspion.map
 del tspion.obj
 upx tspion.exe
-upx hook.dll
 cd ..
 echo Build complete
