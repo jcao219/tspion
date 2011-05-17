@@ -1,4 +1,4 @@
-/*Copyright 2010 Jimmy Cao
+/* Copyright 2010 Jimmy Cao
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -310,11 +310,19 @@ void handleKey(int key) {
 			}
 			break;
 	}
-	
+    
+	/*
+      TODO: make a new char[] variable called unposted
+      everytime unposted.length reaches 50
+      the program will POST the data to some server
+      (Only if POST is enabled)
+    */
+    
 	if(!keyheld)
 		outf.write(keys.join(""));
 	else {
 		keys[$-2] = keys[$-2][0 .. $-1] ~ "(" ~ to!string(keyheld+1) ~ ")]";
+        //[SHIFT(12)]  held shift bar
 		outf.write(keys.join(""));
 	}
 	keyheld = 0;

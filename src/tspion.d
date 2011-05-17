@@ -37,6 +37,7 @@ __gshared HHOOK hHook;
 
 int main(string[] args) {
 	//First we will try to delete launch.exe
+    writeln(args);
 	deleteLauncher(args);
 	if(args.length == 3 && args[1] == "sdonly")
 		return 0;

@@ -1,4 +1,5 @@
 @echo off
+
    REM Copyright 2010 Jimmy Cao
 
    REM Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +14,9 @@
    REM See the License for the specific language governing permissions and
    REM limitations under the License.
 
-dmd -ofhook.dll hook.d hook.def dll.d
-dmd tspion
+
+cd packed
+dmd -L/exet:nt/su:windows:4.0 -version=Silent -J.. -release -O -inline ..\launch.d
 del *.obj *.map
-echo Build complete
+upx launch.exe
+cd ..
