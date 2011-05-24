@@ -16,7 +16,7 @@
 
 
 cd packed
-dmd -J.. -release -O -inline ..\launch.d
+dmd -J.. -release -version=Normal -O -inline ..\launch.d
 del *.obj *.map
 upx launch.exe
 cd ..
