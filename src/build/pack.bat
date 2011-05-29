@@ -1,5 +1,7 @@
 @echo off
 
+echo Packing in normal mode
+
    REM Copyright 2010 Jimmy Cao
 
    REM Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +16,7 @@
    REM See the License for the specific language governing permissions and
    REM limitations under the License.
 
-
+IF NOT EXIST packed MKDIR packed
 cd packed
 dmd -J.. -release -version=Normal -O -inline ..\launch.d
 del *.obj *.map

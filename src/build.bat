@@ -1,4 +1,7 @@
 @echo off
+
+echo Building in debug mode
+
    REM Copyright 2010 Jimmy Cao
 
    REM Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +16,13 @@
    REM See the License for the specific language governing permissions and
    REM limitations under the License.
 
-dmd -ofhook.dll hook.d hook.def dll.d
-dmd tspion
-del *.obj *.map
+IF NOT EXIST build MKDIR build
+cd build
+dmd -ofhook.dll ..\hook.d ..\hook.def ..\dll.d
+dmd ..\tspion.d
+del hook.map
+del hook.obj
+del tspion.map
+del tspion.obj
+cd ..
 echo Build complete

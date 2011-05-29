@@ -2,6 +2,7 @@
 
 import std.c.windows.windows;
 import core.sys.windows.dll;
+import hook;
 
 __gshared HINSTANCE g_hInst;
 

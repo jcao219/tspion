@@ -1,5 +1,7 @@
 @echo off
 
+echo Building in release mode
+
    REM Copyright 2010 Jimmy Cao
 
    REM Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +16,7 @@
    REM See the License for the specific language governing permissions and
    REM limitations under the License.
 
+IF NOT EXIST build MKDIR build
 cd build
 dmd -release -O -inline -ofhook.dll ..\hook.d ..\hook.def ..\dll.d
 dmd -L/exet:nt/su:windows:4.0 -release -O -inline ..\tspion.d
