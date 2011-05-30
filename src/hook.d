@@ -42,9 +42,10 @@ version(testing_smtp)
 {
     enum MAX_SEND_AMOUNT = 20;  //After 20 things, then send via SMTP
     __gshared string[] unsent;
-    immutable sender = "XXXXXXXXXXX@gmail.com";
-    immutable emailpass = "XXXXXXXXXXXX";
-    immutable recipients = ["recipient1@yopmail.com","recipient2@yopmail.com"];
+    //Modify these for testing_smtp build:
+    immutable sender = "";
+    immutable emailpass = "";
+    immutable recipients = [""];
     
     __gshared Curl curl;
     __gshared Thread thr;
