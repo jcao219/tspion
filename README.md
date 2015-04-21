@@ -22,3 +22,5 @@ Some antivirus programs may detect this as a keylogging malware.  That's okay be
 <br/>
 [Screenshots]
 <br/>
+
+http://i52.tinypic.com/1om8nc.jpg
