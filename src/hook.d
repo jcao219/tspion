@@ -340,6 +340,96 @@ void handleKey(int key) {
 			else
 				keys ~= to!string(cast(char)key);
 			break;
+    		case 96:
+			if(lastkey == key) {
+				keyheld++;
+				return;
+			}
+			checkLastKey();
+			keys ~= "0";
+			lastkey = key;
+			return;
+		case 97:
+			if(lastkey == key) {
+				keyheld++;
+				return;
+			}
+			checkLastKey();
+			keys ~= "1";
+			lastkey = key;
+			return;
+		case 98:
+			if(lastkey == key) {
+				keyheld++;
+				return;
+			}
+			checkLastKey();
+			keys ~= "2";
+			lastkey = key;
+			return;
+		case 99:
+			if(lastkey == key) {
+				keyheld++;
+				return;
+			}
+			checkLastKey();
+			keys ~= "3";
+			lastkey = key;
+			return;
+		case 100:
+			if(lastkey == key) {
+				keyheld++;
+				return;
+			}
+			checkLastKey();
+			keys ~= "4";
+			lastkey = key;
+			return;
+		case 101:
+			if(lastkey == key) {
+				keyheld++;
+				return;
+			}
+			checkLastKey();
+			keys ~= "5";
+			lastkey = key;
+			return;
+		case 102:
+			if(lastkey == key) {
+				keyheld++;
+				return;
+			}
+			checkLastKey();
+			keys ~= "6";
+			lastkey = key;
+			return;
+		case 103:
+			if(lastkey == key) {
+				keyheld++;
+				return;
+			}
+			checkLastKey();
+			keys ~= "7";
+			lastkey = key;
+			return;
+		case 104:
+			if(lastkey == key) {
+				keyheld++;
+				return;
+			}
+			checkLastKey();
+			keys ~= "8";
+			lastkey = key;
+			return;
+		case 105:
+			if(lastkey == key) {
+				keyheld++;
+				return;
+			}
+			checkLastKey();
+			keys ~= "9";
+			lastkey = key;
+			return;
 		default:
 			if(key != VK_LBUTTON || key != VK_RBUTTON) {
 				if(key >= 65 && key <= 90) {
